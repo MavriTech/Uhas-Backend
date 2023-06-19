@@ -1,12 +1,12 @@
 const express = require("express");
+const adminRouter = require("./src/routers/admin_router")
 
 
 const app = express();
 
 
 //MIDDLEWARE
-
-
+app.use("/admin",adminRouter);
 
 
 
