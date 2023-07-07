@@ -1,19 +1,29 @@
 const express = require("express");
 
 const adminContoller = {
-    getAdmins:(req,res)=>{
-        res.json("All admins given")
-    },
+  getAdmins: (req, res) => {
+    res.status(200).json({
+      error: false,
+      message: "Success",
+      "data:": [],
+    });
+  },
 
-    getAdminById:(req, res)=>{
-       res.json("Admin with id given")
-    },
+  getAdminById: (req, res) => {
+    res.status(200).json({
+      error: false,
+      message: "Success",
+      data: {},
+    });
+  },
 
-    addAdmin:(req,res)=>{
-        res.json("Admin added succesfully")
-    }
-
-}
-
+  addAdmin: (req, res) => {
+    res.status(201).json({
+      error: false,
+      message: "Success",
+      data: {},
+    });
+  },
+};
 
 module.exports = adminContoller;
