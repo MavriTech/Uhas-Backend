@@ -4,22 +4,22 @@ const adminSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Name is required"],
     },
 
     email: {
       type: String,
-      required: true,
+      required: [true, "Email is required"],
       unique: true,
     },
 
     password: {
       type: String,
       required: true,
-      minlenght: 8,
+      minlenght: [8, "Password must be at least 8 characters"],
     },
   },
-  { timeseries: true }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Admin", adminSchema);
