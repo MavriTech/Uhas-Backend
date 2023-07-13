@@ -16,6 +16,7 @@ const eventController = {
 
     if (!events || events.length === 0) {
       return res.status(404).json({
+        
         error: true,
         message: "No event found",
       });
@@ -34,7 +35,6 @@ const eventController = {
     try {
       const existingUser = await User.findOne({ email });
 
-      
       if (!existingUser) {
         return res.status(404).json({
           error: true,
@@ -51,7 +51,8 @@ const eventController = {
       await newEvent.save();
 
       const { _id, __v, ...newEventResponse } = newEvent.toObject();
-
+      existingUser.events.push(newEventResponse);
+      await existingUser.save();
       return res.status(201).json({
         error: false,
         message: "Success",

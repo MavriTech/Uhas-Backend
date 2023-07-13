@@ -22,6 +22,10 @@ const adminSchema = new mongoose.Schema(
     events: {
       type: Array,
     },
+
+    announcement: {
+      type: Array,
+    }
   },
   { timestamps: true }
 );

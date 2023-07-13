@@ -46,6 +46,8 @@ const announcementController = {
       });
 
       await newAnnouncement.save();
+      existinguser.announcement.push(newAnnouncement);
+      await existinguser.save();
 
       const { _id, __v, ...newAnnouncementResponse } =
         newAnnouncement.toObject();
