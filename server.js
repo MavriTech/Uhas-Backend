@@ -2,6 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const adminRouter = require("./src/routers/admin_router");
+const eventRouter = require("./src/routers/events_router");
+const announcementRouter = require("./src/routers/announcement_router");
+const compression = require("compression");
+
 const MONGOURL =
   "mongodb+srv://mavritech07:Mavritech123@cluster0.izwbgtx.mongodb.net/Namsa-website";
 const PORT = process.env.PORT || 3000;
@@ -10,9 +14,12 @@ const app = express();
 
 // MIDDLEWARES
 app.use(cors());
+app.use(compression());
 app.use(express.json());
 
 app.use("/api/admins", adminRouter);
+app.use("/api/events", eventRouter);
+app.use("/api/announcements", announcementRouter);
 
 //ERROR HANDLING MIDDLEWARES
 app.use((req, res, next) => {

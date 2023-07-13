@@ -1,4 +1,3 @@
-const express = require("express");
 const bcrypt = require("bcrypt");
 const User = require("../models/admin");
 
@@ -17,6 +16,7 @@ const adminContoller = {
     }
 
     if (!users || users.length === 0) {
+      
       res.status(404).json({
         error: true,
         message: "No user found",
@@ -38,17 +38,17 @@ const adminContoller = {
 
     let existinguser;
     try {
-      eaxistinguser = await User.findOne({ email });
+      existinguser = await User.findOne({ email });
     } catch (error) {
       console.log(error);
-      return res.status(404).json({
+      return res.stats(404).json({
         error: true,
         message: "User not found",
       });
     }
 
     if (existinguser) {
-      res.status(400).json({
+      res.status(409).json({
         error: true,
         message: "User already exists",
       });
