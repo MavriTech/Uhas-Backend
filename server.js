@@ -14,14 +14,7 @@ const PORT = process.env.PORT || 4000;
 const app = express();
 
 // MIDDLEWARES
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: false,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
+app.use(cors());
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
