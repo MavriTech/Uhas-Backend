@@ -58,7 +58,7 @@ const announcementController = {
       });
     } catch (error) {
       console.log(error);
-      return res.stats(404).json({
+      return res.status(404).json({
         error: true,
         message: "User not found",
       });

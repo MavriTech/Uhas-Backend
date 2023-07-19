@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/admin");
+const JWT = require("jsonwebtoken");
 
 const adminContoller = {
   // GET ALL ADMINS
@@ -16,7 +17,6 @@ const adminContoller = {
     }
 
     if (!users || users.length === 0) {
-      
       res.status(404).json({
         error: true,
         message: "No user found",
