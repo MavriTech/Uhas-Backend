@@ -1,5 +1,6 @@
 const Announcement = require("../models/announcement");
 const User = require("../models/admin");
+const MessageHandler = require("../../utils/message_handler");
 
 const announcementController = {
   //GET ALL EVENTS
@@ -8,24 +9,17 @@ const announcementController = {
     try {
       announcements = await Announcement.find({}, { __v: 0 });
     } catch (e) {
-      return res.status(404).json({
-        error: true,
-        message: "No announcement found",
-      });
+      const errorMessage = new MessageHandler(true, "No announcement found");
+      return res.status(404).json(errorMessage);
     }
 
     if (!announcements || announcements.length === 0) {
-      return res.status(404).json({
-        error: true,
-        message: "No announcement found",
-      });
+      const errorMessage = new MessageHandler(true, "No announcement found");
+      return res.status(404).json(errorMessage);
     }
 
-    return res.status(200).json({
-      error: false,
-      message: "success",
-      data: announcements,
-    });
+    const succesMessage = new MessageHandler(false, "success", announcements);
+    return res.status(200).json(succesMessage);
   },
 
   addAnnouncement: async (req, res, next) => {
@@ -34,10 +28,8 @@ const announcementController = {
     try {
       const existinguser = await User.findOne({ email });
       if (!existinguser) {
-        return res.status(404).json({
-          error: true,
-          message: "User not found",
-        });
+        const errorMessage = new MessageHandler(true, "User not found");
+        return res.status(404).json(errorMessage);
       }
       const newAnnouncement = new Announcement({
         email,
@@ -50,42 +42,42 @@ const announcementController = {
       await existinguser.save();
 
       const { __v, ...newAnnouncementResponse } = newAnnouncement.toObject();
-      return res.status(201).json({
-        error: false,
-        message: "Success",
-        data: newAnnouncementResponse,
-      });
+      const succesMessage = new MessageHandler(
+        false,
+        "success",
+        newAnnouncementResponse
+      );
+      return res.status(201).json(succesMessage);
     } catch (error) {
-      console.log(error);
-      return res.status(404).json({
-        error: true,
-        message: "User not found",
-      });
+      const errorMessage = new MessageHandler(true, "User not found");
+      return res.status(404).json(errorMessage);
     }
   },
 
   deleteAnnouncement: async (req, res, nex) => {
-    const  announcementId  = req.params.id;
+    const announcementId = req.params.id;
 
     try {
-      const deletedAnnouncement = await Announcement.findByIdAndDelete(announcementId);
+      const deletedAnnouncement = await Announcement.findByIdAndDelete(
+        announcementId
+      );
       if (!deletedAnnouncement) {
-        res.status(404).json({
-          error: "true",
-          message: "Announcement not found",
-        });
-      } 
-      const user = await User.findOne({email: deletedAnnouncement.email});
+        const errorMessage = new MessageHandler(true, "Announcement not found");
+        res.status(404).json(errorMessage);
+      }
+      const user = await User.findOne({ email: deletedAnnouncement.email });
       if (user) {
         user.announcement.pull(announcementId);
         await user.save();
       }
 
-      return res.status(200).json({
-        error: false,
-        message: 'Announcement deleted',
-        data: deletedAnnouncement,
-      });
+      const succesMessage = new MessageHandler(
+        false,
+        "success",
+        deletedAnnouncement
+      );
+
+      return res.status(200).json(succesMessage);
     } catch (error) {}
   },
 };
