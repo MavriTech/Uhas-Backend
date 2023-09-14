@@ -80,7 +80,10 @@ const announcementController = {
       );
 
       return res.status(200).json(succesMessage);
-    } catch (error) {}
+    } catch (error) {
+      const errorMessage = new MessageHandler(true, `${error}`);
+      res.status(400).json(errorMessage);
+    }
   },
 };
 

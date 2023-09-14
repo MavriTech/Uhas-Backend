@@ -1,32 +1,24 @@
 const Event = require("../models/events");
 const User = require("../models/admin");
+const MessageHandler = require("../../utils/message_handler");
 
 const eventController = {
   //GET ALL EVENTS
   getAllEvents: async (req, res, next) => {
     let events;
     try {
-      events = await Event.find({}, {__v: 0 });
+      events = await Event.find({}, { __v: 0 });
     } catch (e) {
-      return res.status(404).json({
-        error: true,
-        message: "No event found",
-      });
+      const errorMessage = new MessageHandler(true, "No event found");
+      return res.status(404).json(errorMessage);
     }
 
     if (!events || events.length === 0) {
-      return res.status(404).json({
-        
-        error: true,
-        message: "No event found",
-      });
+      const errorMessage = new MessageHandler(true, "No event found");
+      return res.status(404).json(errorMessage);
     }
-
-    return res.status(200).json({
-      error: false,
-      message: "success",
-      data: events,
-    });
+    const succesMessage = new MessageHandler(false, "success", events);
+    return res.status(200).json(succesMessage);
   },
 
   addEvent: async (req, res, next) => {
@@ -36,10 +28,8 @@ const eventController = {
       const existingUser = await User.findOne({ email });
 
       if (!existingUser) {
-        return res.status(404).json({
-          error: true,
-          message: "User not found",
-        });
+        const errorMessage = new MessageHandler(true, "User not found");
+        return res.status(404).json(errorMessage);
       }
       const newEvent = new Event({
         email,
@@ -50,21 +40,38 @@ const eventController = {
 
       await newEvent.save();
 
-      const { _id, __v, ...newEventResponse } = newEvent.toObject();
+      const { __v, ...newEventResponse } = newEvent.toObject();
       existingUser.events.push(newEventResponse);
       await existingUser.save();
-      return res.status(201).json({
-        error: false,
-        message: "Success",
-        data: newEventResponse,
-      });
+
+      const succesMessage = new MessageHandler(
+        false,
+        "success",
+        newEventResponse
+      );
+      return res.status(201).json(succesMessage);
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({
-        error: true,
-        message: "Internal Server Error",
-      });
+      const errorMessage = new MessageHandler(true, "Internal Server Error");
+      return res.status(500).json(errorMessage);
     }
+  },
+
+  deleteEvent: async (req, res, next) => {
+    const eventId = req.params.id;
+    try {
+      const deletedEvent = await Event.findByIdAndDelete(eventId);
+      if (!deletedEvent) {
+        const errorMessage = new MessageHandler(true, "Event does not exist");
+        res.status(400).json(errorMessage);
+      }
+
+      const user = await User.findOne({ email: deletedEvent.email });
+      user.events.pull(eventId);
+      await user.save();
+
+      const succesMessage = new MessageHandler(false, "success", deletedEvent);
+      return res.status(200).json(deletedEvent);
+    } catch (e) {}
   },
 };
 module.exports = eventController;
