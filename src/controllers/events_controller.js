@@ -6,7 +6,7 @@ const eventController = {
   getAllEvents: async (req, res, next) => {
     let events;
     try {
-      events = await Event.find({}, { _id: 0, __v: 0 });
+      events = await Event.find({}, {__v: 0 });
     } catch (e) {
       return res.status(404).json({
         error: true,

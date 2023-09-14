@@ -3,7 +3,7 @@ const User = require("../models/admin");
 const MessageHandler = require("../../utils/message_handler");
 
 const announcementController = {
-  //GET ALL EVENTS
+  //GET ALL ANNOUNCEMENT
   getAllAnnouncements: async (req, res, next) => {
     let announcements;
     try {
@@ -22,6 +22,7 @@ const announcementController = {
     return res.status(200).json(succesMessage);
   },
 
+  //POST AN ANNOUNCEMENT
   addAnnouncement: async (req, res, next) => {
     const { email, title, description } = req.body;
 
@@ -54,6 +55,7 @@ const announcementController = {
     }
   },
 
+  //DELETE ANNONCEMENT
   deleteAnnouncement: async (req, res, nex) => {
     const announcementId = req.params.id;
 
@@ -70,7 +72,7 @@ const announcementController = {
         user.announcement.pull(announcementId);
         await user.save();
       }
-
+      deletedAnnouncement.__v = undefined;
       const succesMessage = new MessageHandler(
         false,
         "success",

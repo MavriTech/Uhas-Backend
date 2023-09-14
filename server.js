@@ -6,6 +6,7 @@ const eventRouter = require("./src/routes/events_router");
 const announcementRouter = require("./src/routes/announcement_router");
 const feedBackRouter = require("./src/routes/feedback_router");
 const compression = require("compression");
+const errorHandler = require("./utils/error_handler");
 
 const MONGOURL =
   "mongodb+srv://mavritech07:Mavritech123@cluster0.izwbgtx.mongodb.net/Namsa-website";
@@ -31,11 +32,7 @@ app.use((req, res, next) => {
   next(error);
 });
 
-app.use((err, req, res, next) => {
-  const statusCode = err.status || 500;
-  const errorMessage = err.message || "Internal Server Error";
-  res.status(statusCode).json({ error: errorMessage });
-});
+app.use(errorHandler);
 
 mongoose
   .connect(MONGOURL)
