@@ -6,5 +6,6 @@ const announcementRouter = express.Router();
 
 announcementRouter.get("/", announcementController.getAllAnnouncements);
 announcementRouter.post("/", announcementController.addAnnouncement);
+announcementRouter.delete("/:id", announcementController.deleteAnnouncement);
 
 module.exports = announcementRouter;

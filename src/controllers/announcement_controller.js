@@ -6,7 +6,7 @@ const announcementController = {
   getAllAnnouncements: async (req, res, next) => {
     let announcements;
     try {
-      announcements = await Announcement.find({}, { _id: 0, __v: 0 });
+      announcements = await Announcement.find({}, { __v: 0 });
     } catch (e) {
       return res.status(404).json({
         error: true,
@@ -49,8 +49,7 @@ const announcementController = {
       existinguser.announcement.push(newAnnouncement);
       await existinguser.save();
 
-      const { _id, __v, ...newAnnouncementResponse } =
-        newAnnouncement.toObject();
+      const { __v, ...newAnnouncementResponse } = newAnnouncement.toObject();
       return res.status(201).json({
         error: false,
         message: "Success",
@@ -63,6 +62,31 @@ const announcementController = {
         message: "User not found",
       });
     }
+  },
+
+  deleteAnnouncement: async (req, res, nex) => {
+    const  announcementId  = req.params.id;
+
+    try {
+      const deletedAnnouncement = await Announcement.findByIdAndDelete(announcementId);
+      if (!deletedAnnouncement) {
+        res.status(404).json({
+          error: "true",
+          message: "Announcement not found",
+        });
+      } 
+      const user = await User.findOne({email: deletedAnnouncement.email});
+      if (user) {
+        user.announcement.pull(announcementId);
+        await user.save();
+      }
+
+      return res.status(200).json({
+        error: false,
+        message: 'Announcement deleted',
+        data: deletedAnnouncement,
+      });
+    } catch (error) {}
   },
 };
 
