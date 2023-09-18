@@ -15,6 +15,10 @@ const announcementSchema = new mongoose.Schema(
       type: String,
       required: [true, "Email is required"],
     },
+    image: {
+      type: String,
+      required: [true, "Image is required"],
+    },
   },
   {
     timestamps: true,

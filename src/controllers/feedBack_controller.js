@@ -4,7 +4,7 @@ const feedBackController = {
   getAllFeedBacks: async (req, res, nexr) => {
     let feedbacks;
     try {
-      feedbacks = await Feedback.find();
+      feedbacks = await Feedback.find({}, { __v });
     } catch (error) {
       console.log(error);
     }
@@ -36,7 +36,7 @@ const feedBackController = {
       });
       await newFeedback.save();
 
-      const { _id, __v, ...newFeedbackResponse } = newFeedback.toObject();
+      const { __v, ...newFeedbackResponse } = newFeedback.toObject();
 
       return res.status(200).json({
         error: false,

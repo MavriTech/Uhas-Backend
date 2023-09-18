@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const dotenv = require("dotenv");
 const adminRouter = require("./src/routes/admin_router");
 const eventRouter = require("./src/routes/events_router");
 const announcementRouter = require("./src/routes/announcement_router");
@@ -19,6 +20,7 @@ app.use(cors());
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static('uploads'));
 
 app.use("/api/admins", adminRouter);
 app.use("/api/events", eventRouter);
