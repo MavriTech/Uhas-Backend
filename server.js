@@ -7,11 +7,11 @@ const eventRouter = require("./src/routes/events_router");
 const announcementRouter = require("./src/routes/announcement_router");
 const feedBackRouter = require("./src/routes/feedback_router");
 const compression = require("compression");
-const errorHandler = require("./utils/error_handler");
+const errorHandler = require("./src/middlewares/error_handler");
+const notFoundErrorHandler = require("./src/middlewares/404_error_handler");
+dotenv.config();
 
-const MONGOURL =
-  "mongodb+srv://mavritech07:Mavritech123@cluster0.izwbgtx.mongodb.net/Namsa-website";
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.use(cors());
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static('uploads'));
+app.use("/uploads", express.static("uploads"));
 
 app.use("/api/admins", adminRouter);
 app.use("/api/events", eventRouter);
@@ -28,16 +28,11 @@ app.use("/api/announcements", announcementRouter);
 app.use("/api/feedbacks", feedBackRouter);
 
 //ERROR HANDLING MIDDLEWARES
-app.use((req, res, next) => {
-  const error = new Error("Not Found");
-  error.status = 404;
-  next(error);
-});
-
+app.use(notFoundErrorHandler);
 app.use(errorHandler);
 
 mongoose
-  .connect(MONGOURL)
+  .connect(process.env.MONGOURL)
   .then(() => {
     console.log("Database connected successfully");
     app.listen(PORT, () => {
