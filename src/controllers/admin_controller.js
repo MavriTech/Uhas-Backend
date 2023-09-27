@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/admin");
 const JWT = require("jsonwebtoken");
+const dotenv = require("dotenv");
+
 
 const adminContoller = {
   // GET ALL ADMINS
@@ -30,10 +32,10 @@ const adminContoller = {
     });
   },
 
-  getAdminById: (req, res, next) => {},
+  getAdminById: (req, res) => {},
 
   //SIGN UP
-  addAdmin: async (req, res, next) => {
+  addAdmin: async (req, res) => {
     const { name, email, password } = req.body;
 
     let existinguser;
@@ -75,7 +77,7 @@ const adminContoller = {
   },
 
   // LOGIN
-  loginAdmin: async (req, res, next) => {
+  loginAdmin: async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -104,18 +106,8 @@ const adminContoller = {
         });
       }
 
-      const {
-        password: omitPassword,
-        _id,
-        __v,
-        ...adminData
-      } = admin.toObject();
-
-      return res.status(200).json({
-        error: false,
-        message: "Successfully logged in",
-        data: adminData,
-      });
+      const token = JWT.sign({ _id: admin._id }, process.env.SECRET_TOKEN);
+      res.header("auth-token", token).send(token);
     } catch (error) {
       console.log(error);
       return res.status(500).json({

@@ -40,15 +40,7 @@ const eventController = {
 
       await newEvent.save();
 
-      const { __v, ...newEventResponse } = newEvent.toObject();
-      existingUser.events.push(newEventResponse);
-      await existingUser.save();
-
-      const succesMessage = new MessageHandler(
-        false,
-        "success",
-        newEventResponse
-      );
+      const succesMessage = new MessageHandler(false, "success", newEvent);
       return res.status(201).json(succesMessage);
     } catch (error) {
       const errorMessage = new MessageHandler(true, "Internal Server Error");
@@ -59,7 +51,7 @@ const eventController = {
   deleteEvent: async (req, res, next) => {
     const eventId = req.params.id;
     try {
-      const deletedEvent = await Event.findByIdAndDelete(eventId);
+      const deletedEvent = await Event.findByIdAndDelete({ _id: eventId });
       if (!deletedEvent) {
         const errorMessage = new MessageHandler(true, "Event does not exist");
         res.status(400).json(errorMessage);
@@ -70,7 +62,7 @@ const eventController = {
       await user.save();
 
       const succesMessage = new MessageHandler(false, "success", deletedEvent);
-      return res.status(200).json(deletedEvent);
+      return res.status(200).json(succesMessage);
     } catch (e) {}
   },
 };
