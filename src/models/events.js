@@ -16,10 +16,8 @@ const eventSchema = new mongoose.Schema(
       type: String,
       required: [true, "Description is required"],
     },
-
-    email: {
+    image: {
       type: String,
-      required: [true, "Email is required"],
     },
   },
   {

@@ -3,7 +3,6 @@ const User = require("../models/admin");
 const JWT = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
-
 const adminContoller = {
   // GET ALL ADMINS
   getAdmins: async (req, res, next) => {
@@ -106,7 +105,9 @@ const adminContoller = {
         });
       }
 
-      const token = JWT.sign({ _id: admin._id }, process.env.SECRET_TOKEN);
+      const token = JWT.sign({ _id: admin._id }, process.env.SECRET_TOKEN, {
+        expiresIn: "1h",
+      });
       res.header("auth-token", token).send(token);
     } catch (error) {
       console.log(error);

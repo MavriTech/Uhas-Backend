@@ -36,12 +36,11 @@ const feedBackController = {
       });
       await newFeedback.save();
 
-      const { __v, ...newFeedbackResponse } = newFeedback.toObject();
-
+      
       return res.status(200).json({
         error: false,
         message: "Success",
-        data: newFeedbackResponse,
+        data: newFeedback,
       });
     } catch (error) {
       console.log(error);

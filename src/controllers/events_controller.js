@@ -4,7 +4,7 @@ const MessageHandler = require("../../utils/message_handler");
 
 const eventController = {
   //GET ALL EVENTS
-  getAllEvents: async (req, res, next) => {
+  getAllEvents: async (req, res) => {
     let events;
     try {
       events = await Event.find({}, { __v: 0 });
@@ -21,21 +21,16 @@ const eventController = {
     return res.status(200).json(succesMessage);
   },
 
-  addEvent: async (req, res, next) => {
-    const { email, title, venue, description } = req.body;
+  addEvent: async (req, res) => {
+    const {title, venue, description,image } = req.body;
 
     try {
-      const existingUser = await User.findOne({ email });
-
-      if (!existingUser) {
-        const errorMessage = new MessageHandler(true, "User not found");
-        return res.status(404).json(errorMessage);
-      }
+      const url_image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
       const newEvent = new Event({
-        email,
         title,
         venue,
         description,
+        email:url_image
       });
 
       await newEvent.save();
@@ -48,7 +43,7 @@ const eventController = {
     }
   },
 
-  deleteEvent: async (req, res, next) => {
+  deleteEvent: async (req, res) => {
     const eventId = req.params.id;
     try {
       const deletedEvent = await Event.findByIdAndDelete({ _id: eventId });

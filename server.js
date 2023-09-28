@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const compression = require("compression");
+const path = require('path');
 const errorHandler = require("./src/middlewares/error_handler");
 const notFoundErrorHandler = require("./src/middlewares/404_error_handler");
 const dotenv = require("dotenv");
@@ -16,6 +17,21 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
+
+// MIDDLEWARES.
+app.use(cors());
+app.use("/images",express.static(path.join(__dirname,"images")));
+app.use(compression());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+app.use("/api/admins", adminRouter);
+app.use("/api/events", eventRouter);
+app.use("/api/announcements", announcementRouter);
+app.use("/api/feedbacks", feedBackRouter);
+
+
 app.set("views", "./src/views");
 app.set("view engine", "ejs");
 
@@ -25,18 +41,6 @@ app.get("/", (req, res) => {
 app.get("/api", (req, res) => {
   res.render("index");
 });
-
-// MIDDLEWARES
-app.use(cors());
-app.use(compression());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use("/uploads", express.static("uploads"));
-
-app.use("/api/admins", adminRouter);
-app.use("/api/events", eventRouter);
-app.use("/api/announcements", announcementRouter);
-app.use("/api/feedbacks", feedBackRouter);
 
 //ERROR HANDLING MIDDLEWARES
 app.use(notFoundErrorHandler);
