@@ -22,15 +22,17 @@ const eventController = {
   },
 
   addEvent: async (req, res) => {
-    const {title, venue, description,image } = req.body;
+    const { title, venue, description, image } = req.body;
 
     try {
-      const url_image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+      const url_image = `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`;
       const newEvent = new Event({
         title,
         venue,
         description,
-        email:url_image
+        image: url_image,
       });
 
       await newEvent.save();
