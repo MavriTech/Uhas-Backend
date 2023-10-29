@@ -18,14 +18,6 @@ const adminSchema = new mongoose.Schema(
       required: true,
       minlenght: [8, "Password must be at least 8 characters"],
     },
-
-    // events: {
-    //   type: Array,
-    // },
-
-    // announcement: {
-    //   type: Array,
-    // }
   },
   { timestamps: true }
 );

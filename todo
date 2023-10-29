@@ -1,2 +1,8 @@
-# I must add express validator to enhannce email and password validation
-## I must work on jwt web tokens for admin authentication
+<!-- const firebaseConfig = {
+  apiKey: "AIzaSyBgKhqosnVkNmhr4KZ56Vq2RTJiRdD0FiM",
+  authDomain: "uhas-namsa.firebaseapp.com",
+  projectId: "uhas-namsa",
+  storageBucket: "uhas-namsa.appspot.com",
+  messagingSenderId: "880008718701",
+  appId: "1:880008718701:web:5fbad6dbac939881799264"
+}; -->

@@ -1,13 +1,14 @@
 const Event = require("../models/events");
 const User = require("../models/admin");
 const MessageHandler = require("../../utils/message_handler");
+const cloudinary = require('../../utils/cloudinary');
 
 const eventController = {
   //GET ALL EVENTS
   getAllEvents: async (req, res) => {
     let events;
     try {
-      events = await Event.find({}, { __v: 0 });
+      events = await Event.find();
     } catch (e) {
       const errorMessage = new MessageHandler(true, "No event found");
       return res.status(404).json(errorMessage);
@@ -25,9 +26,8 @@ const eventController = {
     const { title, venue, description, image } = req.body;
 
     try {
-      const url_image = `${req.protocol}://${req.get("host")}/images/${
-        req.file.filename
-      }`;
+      const uploadResult =await cloudinary.uploader.upload(req.file.path);
+      const url_image = uploadResult.secure_url;
       const newEvent = new Event({
         title,
         venue,
@@ -53,10 +53,6 @@ const eventController = {
         const errorMessage = new MessageHandler(true, "Event does not exist");
         res.status(400).json(errorMessage);
       }
-
-      const user = await User.findOne({ email: deletedEvent.email });
-      user.events.pull(eventId);
-      await user.save();
 
       const succesMessage = new MessageHandler(false, "success", deletedEvent);
       return res.status(200).json(succesMessage);

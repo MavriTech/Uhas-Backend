@@ -1,14 +1,13 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/admin");
 const JWT = require("jsonwebtoken");
-const dotenv = require("dotenv");
 
 const adminContoller = {
   // GET ALL ADMINS
   getAdmins: async (req, res, next) => {
     let users;
     try {
-      users = await User.find({}, { _id: 0, __v: 0 });
+      users = await User.find();
     } catch (error) {
       console.log(error);
       return res.status(404).json({
@@ -83,7 +82,7 @@ const adminContoller = {
       if (!email || !password) {
         return res.status(400).json({
           error: true,
-          message: "Please provide email and password",
+          message: "Provide email and password",
         });
       }
 

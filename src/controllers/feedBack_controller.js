@@ -1,7 +1,7 @@
 const Feedback = require("../models/feedback");
 
 const feedBackController = {
-  getAllFeedBacks: async (req, res, nexr) => {
+  getAllFeedBacks: async (req, res) => {
     let feedbacks;
     try {
       feedbacks = await Feedback.find({}, { __v });
@@ -23,7 +23,7 @@ const feedBackController = {
     });
   },
 
-  addFeedback: async (req, res, next) => {
+  addFeedback: async (req, res) => {
     const { email, fullName, phone, resourceSuggest, note } = req.body;
 
     try {
