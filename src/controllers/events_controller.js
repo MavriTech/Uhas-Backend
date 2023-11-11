@@ -51,7 +51,7 @@ const eventController = {
       const deletedEvent = await Event.findByIdAndDelete({ _id: eventId });
       if (!deletedEvent) {
         const errorMessage = new MessageHandler(true, "Event does not exist");
-        res.status(400).json(errorMessage);
+       return res.status(400).json(errorMessage);
       }
 
       const succesMessage = new MessageHandler(false, "success", deletedEvent);

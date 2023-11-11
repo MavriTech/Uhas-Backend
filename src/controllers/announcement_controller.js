@@ -61,7 +61,7 @@ const announcementController = {
       });
       if (!deletedAnnouncement) {
         const errorMessage = new MessageHandler(true, "Announcement not found");
-        res.status(404).json(errorMessage);
+      return  res.status(404).json(errorMessage);
       }
       const succesMessage = new MessageHandler(
         false,

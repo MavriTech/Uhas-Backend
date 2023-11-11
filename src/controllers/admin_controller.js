@@ -16,7 +16,7 @@ const adminContoller = {
 
     if (!admins || admins.length === 0) {
       const errorMessage = new MessageHandler(true, `No admin found`);
-      res.status(404).json(errorMessage);
+     return res.status(404).json(errorMessage);
     }
 
     const succesMessage = new MessageHandler(false, "success", admins);
@@ -39,7 +39,7 @@ const adminContoller = {
 
     if (existinguser) {
       const errorMessage = new MessageHandler(true, "Admin already exists");
-      res.status(409).json(errorMessage);
+     return res.status(409).json(errorMessage);
     }
 
     const hasdhedpassword = await bcrypt.hash(password, 10);
@@ -53,7 +53,7 @@ const adminContoller = {
       await newUser.save();
     } catch (error) {
       const errorMessage = new MessageHandler(true, "Unable to save admin");
-      res.status(500).json(errorMessage);
+     return  res.status(500).json(errorMessage);
     }
     const succesMessage = new MessageHandler(false, "success", newUser);
     res.status(201).json(succesMessage);
@@ -93,7 +93,7 @@ const adminContoller = {
         expiresIn: "2 days",
       });
 
-      res.header("auth-token", token).send({
+    return res.header("auth-token", token).send({
         error: false,
         token: token,
         admin: admin,

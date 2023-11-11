@@ -10,7 +10,7 @@ const feedBackController = {
     }
 
     if (!feedbacks || feedbacks.length === 0) {
-      res.status(404).json({
+    return  res.status(404).json({
         error: true,
         message: "No feedback found",
       });

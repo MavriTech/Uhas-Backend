@@ -43,10 +43,10 @@ const courseController = {
       await newCourse.save();
 
       const succesMessage = new MessageHandler(false, "sucess", newCourse);
-      await res.status(200).json(succesMessage);
+      return res.status(200).json(succesMessage);
     } catch (error) {
       const errorMessage = new MessageHandler(true, `${error}`);
-      await res.status(500).json(errorMessage);
+      return res.status(500).json(errorMessage);
     }
   },
 };
