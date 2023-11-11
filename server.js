@@ -48,9 +48,11 @@ app.get("/docs", (req, res) => {
 //ERROR HANDLING MIDDLEWARES
 app.use(notFoundErrorHandler);
 app.use(errorHandler);
-
 mongoose
-  .connect(`${process.env.MONGOURL}`)
+  .connect(process.env.MONGOURL, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  })
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server has started running on port ${PORT}`);
