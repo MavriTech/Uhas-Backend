@@ -5,7 +5,7 @@ const image_handler = require("../middlewares/image_handler");
 
 const announcementRouter = express.Router();
 
-announcementRouter.get("/", verify, announcementController.getAllAnnouncements);
+announcementRouter.get("/",announcementController.getAllAnnouncements);
 announcementRouter.post(
   "/",
   verify,
