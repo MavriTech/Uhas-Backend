@@ -16,7 +16,6 @@ const feedBackSchema = new mongoose.Schema(
 
     resourceSuggest: {
       type: String,
-      required: [true, "Resource Suggestion is required"],
     },
 
     note: {

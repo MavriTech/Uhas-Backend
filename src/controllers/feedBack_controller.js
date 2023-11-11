@@ -4,7 +4,7 @@ const feedBackController = {
   getAllFeedBacks: async (req, res) => {
     let feedbacks;
     try {
-      feedbacks = await Feedback.find({}, { __v });
+      feedbacks = await Feedback.find();
     } catch (error) {
       console.log(error);
     }

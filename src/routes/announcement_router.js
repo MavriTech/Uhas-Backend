@@ -1,6 +1,5 @@
 const express = require("express");
 const announcementController = require("../controllers/announcement_controller");
-const announcement = require("../models/announcement");
 const verify = require("../middlewares/verify_token");
 const image_handler = require("../middlewares/image_handler");
 

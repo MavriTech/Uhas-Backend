@@ -1,33 +1,26 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/admin");
+const Admin = require("../models/admin");
 const JWT = require("jsonwebtoken");
+const MessageHandler = require("../../utils/message_handler");
 
 const adminContoller = {
   // GET ALL ADMINS
-  getAdmins: async (req, res, next) => {
-    let users;
+  getAdmins: async (req, res) => {
+    let admins;
     try {
-      users = await User.find();
+      admins = await Admin.find();
     } catch (error) {
-      console.log(error);
-      return res.status(404).json({
-        error: true,
-        message: "No user found",
-      });
+      const errorMessage = new MessageHandler(true, `${error}`);
+      return res.status(404).json(errorMessage);
     }
 
-    if (!users || users.length === 0) {
-      res.status(404).json({
-        error: true,
-        message: "No user found",
-      });
+    if (!admins || admins.length === 0) {
+      const errorMessage = new MessageHandler(true, `No admin found`);
+      res.status(404).json(errorMessage);
     }
 
-    return res.status(200).json({
-      error: false,
-      message: "Success",
-      "data:": users,
-    });
+    const succesMessage = new MessageHandler(false, "success", admins);
+    return res.status(200).json(succesMessage);
   },
 
   getAdminById: (req, res) => {},
@@ -38,24 +31,19 @@ const adminContoller = {
 
     let existinguser;
     try {
-      existinguser = await User.findOne({ email });
+      existinguser = await Admin.findOne({ email });
     } catch (error) {
-      console.log(error);
-      return res.stats(404).json({
-        error: true,
-        message: "User not found",
-      });
+      const errorMessage = new MessageHandler(true, `${error}`);
+      return res.stats(404).json(errorMessage);
     }
 
     if (existinguser) {
-      res.status(409).json({
-        error: true,
-        message: "User already exists",
-      });
+      const errorMessage = new MessageHandler(true, "Admin already exists");
+      res.status(409).json(errorMessage);
     }
 
     const hasdhedpassword = await bcrypt.hash(password, 10);
-    const newUser = new User({
+    const newUser = new Admin({
       name,
       email,
       password: hasdhedpassword,
@@ -64,14 +52,11 @@ const adminContoller = {
     try {
       await newUser.save();
     } catch (error) {
-      console.log(error);
+      const errorMessage = new MessageHandler(true, "Unable to save admin");
+      res.status(500).json(errorMessage);
     }
-    const { _id, __v, ...userResponse } = newUser.toObject();
-    res.status(201).json({
-      error: false,
-      message: "Success",
-      data: userResponse,
-    });
+    const succesMessage = new MessageHandler(false, "success", newUser);
+    res.status(201).json(succesMessage);
   },
 
   // LOGIN
@@ -86,7 +71,7 @@ const adminContoller = {
         });
       }
 
-      const admin = await User.findOne({ email });
+      const admin = await Admin.findOne({ email });
 
       if (!admin) {
         return res.status(404).json({
@@ -105,14 +90,18 @@ const adminContoller = {
       }
 
       const token = JWT.sign({ _id: admin._id }, process.env.SECRET_TOKEN, {
-        expiresIn: "1h",
+        expiresIn: "2 days",
       });
-      res.header("auth-token", token).send(token);
+
+      res.header("auth-token", token).send({
+        error: false,
+        token: token,
+        admin: admin,
+      });
     } catch (error) {
-      console.log(error);
       return res.status(500).json({
         error: true,
-        message: "Internal Server Error",
+        message: `${error}`,
       });
     }
   },

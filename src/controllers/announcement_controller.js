@@ -63,12 +63,6 @@ const announcementController = {
         const errorMessage = new MessageHandler(true, "Announcement not found");
         res.status(404).json(errorMessage);
       }
-      const user = await User.findOne({ email: deletedAnnouncement.email });
-      if (user) {
-        user.announcement.pull(announcementId);
-        await user.save();
-      }
-      deletedAnnouncement.__v = undefined;
       const succesMessage = new MessageHandler(
         false,
         "success",

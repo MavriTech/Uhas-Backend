@@ -10,6 +10,7 @@ const adminRouter = require("./src/routes/admin_router");
 const eventRouter = require("./src/routes/events_router");
 const announcementRouter = require("./src/routes/announcement_router");
 const feedBackRouter = require("./src/routes/feedback_router");
+const courseRouter = require("./src/routes/course_router");
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ const app = express();
 
 // MIDDLEWARES.
 app.use(cors());
-app.use("/images", express.static(path.join(__dirname, "images")));
+// app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -28,6 +29,7 @@ app.use("/api/admins", adminRouter);
 app.use("/api/events", eventRouter);
 app.use("/api/announcements", announcementRouter);
 app.use("/api/feedbacks", feedBackRouter);
+app.use("/api/courses", courseRouter);
 
 app.set("views", "./src/views");
 app.set("view engine", "ejs");
@@ -39,7 +41,9 @@ app.get("/api", (req, res) => {
   res.render("index");
 });
 
-app.get("/docs", (req, res) => [res.render("docs")]);
+app.get("/docs", (req, res) => {
+  res.render("docs");
+});
 
 //ERROR HANDLING MIDDLEWARES
 app.use(notFoundErrorHandler);
