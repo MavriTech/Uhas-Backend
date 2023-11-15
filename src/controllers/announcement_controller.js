@@ -11,7 +11,7 @@ const announcementController = {
       announcements = await Announcement.find();
     } catch (e) {
       const errorMessage = new MessageHandler(true, `${e}`);
-      return res.status(404).json(errorMessage);
+      return res.status(404).json();
     }
 
     if (!announcements || announcements.length === 0) {
@@ -61,7 +61,7 @@ const announcementController = {
       });
       if (!deletedAnnouncement) {
         const errorMessage = new MessageHandler(true, "Announcement not found");
-      return  res.status(404).json(errorMessage);
+        return res.status(404).json(errorMessage);
       }
       const succesMessage = new MessageHandler(
         false,
@@ -72,7 +72,7 @@ const announcementController = {
       return res.status(200).json(succesMessage);
     } catch (error) {
       const errorMessage = new MessageHandler(true, `${error}`);
-      res.status(400).json(errorMessage);
+      return res.status(400).json(errorMessage);
     }
   },
 };

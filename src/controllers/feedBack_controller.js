@@ -43,7 +43,7 @@ const feedBackController = {
         data: newFeedback,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return res.status(500).json({
         error: true,
         message: "Internal server error",

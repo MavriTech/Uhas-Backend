@@ -11,7 +11,7 @@ const adminContoller = {
       admins = await Admin.find();
     } catch (error) {
       const errorMessage = new MessageHandler(true, `${error}`);
-      return res.status(404).json(errorMessage);
+      return res.status(505).json(errorMessage);
     }
 
     if (!admins || admins.length === 0) {
@@ -64,7 +64,7 @@ const adminContoller = {
     const { email, password } = req.body;
 
     try {
-      if (!email || !password) {
+      if (!(email || password)) {
         return res.status(400).json({
           error: true,
           message: "Provide email and password",
@@ -108,7 +108,7 @@ const adminContoller = {
 
   // UPDATE ADMIN
 
-  //   updateAdminByEmail: async (req, res, next) => {
+  //   updateAdminByEmail: async (req, res) => {
   //     const { email, name, password } = req.body;
 
   //     try {

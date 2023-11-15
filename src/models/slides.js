@@ -12,7 +12,7 @@ const slidesSchema = new mongoose.Schema(
     },
     course: {
       type: String,
-      required: [true, "Course is required"],             
+      required: [true, "Course is required"],
     },
     file: {
       type: String,

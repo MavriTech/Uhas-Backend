@@ -11,6 +11,7 @@ const eventRouter = require("./src/routes/events_router");
 const announcementRouter = require("./src/routes/announcement_router");
 const feedBackRouter = require("./src/routes/feedback_router");
 const courseRouter = require("./src/routes/course_router");
+const slideRouter = require("./src/routes/slides _router");
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use("/api/events", eventRouter);
 app.use("/api/announcements", announcementRouter);
 app.use("/api/feedbacks", feedBackRouter);
 app.use("/api/courses", courseRouter);
+app.use("/api/slides", slideRouter);
 
 app.set("views", "./src/views");
 app.set("view engine", "ejs");
